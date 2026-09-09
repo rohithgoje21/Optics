@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum GalleryCategory {
+  EYEGLASSES
+  SUNGLASSES
+  KIDS_FRAMES
+  COMPUTER_GLASSES
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model AdminCredentials {
+  id           String   @id @default("main")
+  passwordHash String
+  updatedAt    DateTime @updatedAt
+}
+
+model SiteSettings {
+  id           String @id @default("main")
+  shopName     String
+  tagline      String
+  taglineTelugu String?
+  phone        String
+  address      String
+  mapEmbedUrl  String?
+  hoursText    String
+  servicesText String
+  aboutText    String
+  updatedAt    DateTime @updatedAt
+}
+
+model GalleryItem {
+  id         String          @id @default(cuid())
+  imageUrl   String
+  caption    String
+  category   GalleryCategory
+  sortOrder  Int             @default(0)
+  isActive   Boolean         @default(true)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  @@index([category])
+}
+
+model Appointment {
+  id            String            @id @default(cuid())
+  customerName  String
+  phone         String
+  preferredDate String
+  slotTime      String
+  reason        String?
+  status        AppointmentStatus @default(PENDING)
+  adminNotes    String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([preferredDate])
+}
