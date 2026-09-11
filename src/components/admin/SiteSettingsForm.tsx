@@ -13,19 +13,24 @@ function Field({
   error,
   textarea,
   required = true,
+  hint,
+  type,
 }: {
   label: string
   name: string
-  defaultValue?: string | null
+  defaultValue?: string | number | null
   error?: string
   textarea?: boolean
   required?: boolean
+  hint?: string
+  type?: string
 }) {
   return (
     <div>
       <label htmlFor={name} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
+      {hint && <p className="mt-1 text-xs text-gray-500">{hint}</p>}
       {textarea ? (
         <textarea
           id={name}
@@ -39,6 +44,8 @@ function Field({
         <input
           id={name}
           name={name}
+          type={type}
+          step={type === "number" ? "any" : undefined}
           defaultValue={defaultValue ?? ""}
           required={required}
           className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
@@ -72,12 +79,32 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
       />
       <Field label="Phone" name="phone" defaultValue={settings.phone} error={state.fieldErrors?.phone} />
       <Field label="Address" name="address" defaultValue={settings.address} error={state.fieldErrors?.address} />
+      <div className="grid grid-cols-2 gap-4">
+        <Field
+          label="Latitude (optional)"
+          name="latitude"
+          type="number"
+          defaultValue={settings.latitude}
+          error={state.fieldErrors?.latitude}
+          required={false}
+          hint="GPS coordinates pin the map/directions exactly, more reliable than the address text alone."
+        />
+        <Field
+          label="Longitude (optional)"
+          name="longitude"
+          type="number"
+          defaultValue={settings.longitude}
+          error={state.fieldErrors?.longitude}
+          required={false}
+        />
+      </div>
       <Field
         label="Map Embed URL (optional)"
         name="mapEmbedUrl"
         defaultValue={settings.mapEmbedUrl}
         error={state.fieldErrors?.mapEmbedUrl}
         required={false}
+        hint="Leave blank to auto-generate the map from the Address field above. Only set this if you want to point to a specific Google Maps listing instead."
       />
       <Field label="Hours" name="hoursText" defaultValue={settings.hoursText} error={state.fieldErrors?.hoursText} />
       <Field

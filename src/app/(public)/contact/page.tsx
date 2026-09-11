@@ -1,5 +1,6 @@
 import { MapPin, Phone } from "lucide-react";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getGoogleMapsDirectionsUrl, getGoogleMapsEmbedUrl } from "@/lib/maps";
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();
@@ -15,7 +16,15 @@ export default async function ContactPage() {
           </a>
         </p>
         <p className="flex items-center gap-3 text-lg">
-          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" /> {settings.address}
+          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+          <a
+            href={getGoogleMapsDirectionsUrl(settings)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
+            {settings.address}
+          </a>
         </p>
         <p>{settings.hoursText}</p>
       </div>
@@ -25,14 +34,12 @@ export default async function ContactPage() {
         <p className="mt-2 text-gray-700">{settings.aboutText}</p>
       </div>
 
-      {settings.mapEmbedUrl ? (
-        <iframe
-          src={settings.mapEmbedUrl}
-          className="mt-8 h-72 w-full rounded-lg border"
-          loading="lazy"
-          title="Shop location map"
-        />
-      ) : null}
+      <iframe
+        src={settings.mapEmbedUrl || getGoogleMapsEmbedUrl(settings)}
+        className="mt-8 h-72 w-full rounded-lg border"
+        loading="lazy"
+        title="Shop location map"
+      />
     </div>
   );
 }

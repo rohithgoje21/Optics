@@ -1,4 +1,4 @@
-export const WORKING_DAYS = [1, 2, 3, 4, 5, 6] as const // Mon–Sat (0 = Sunday)
+export const WORKING_DAYS = [0, 1, 2, 3, 4, 5, 6] as const // open every day
 export const OPEN_HOUR = 10 // 10 AM
 export const CLOSE_HOUR = 20 // 8 PM
 export const SLOT_MINUTES = 30

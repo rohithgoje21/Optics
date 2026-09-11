@@ -3,18 +3,15 @@
 import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { requireAdminSession } from "@/lib/auth"
-import type { AppointmentStatus } from "@prisma/client"
 
-const VALID_STATUSES: AppointmentStatus[] = ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"]
-
-export async function updateAppointmentStatusAction(formData: FormData) {
+export async function deleteAppointmentAction(formData: FormData) {
   await requireAdminSession()
 
   const id = String(formData.get("id") ?? "")
-  const status = String(formData.get("status") ?? "") as AppointmentStatus
+  if (!id) return
 
-  if (!id || !VALID_STATUSES.includes(status)) return
-
-  await prisma.appointment.update({ where: { id }, data: { status } })
+  await prisma.appointment.delete({ where: { id } }).catch(() => {
+    // already deleted (e.g. by the 7-day auto-cleanup) — nothing to do
+  })
   revalidatePath("/admin/appointments")
 }

@@ -2,17 +2,28 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Menu, Phone, X } from "lucide-react"
+import { Menu, Phone, MapPin, X } from "lucide-react"
+import { getGoogleMapsDirectionsUrl, type MapLocation } from "@/lib/maps"
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/gallery", label: "Eyewear Gallery" },
   { href: "/book-appointment", label: "Book Appointment" },
+  { href: "/faq", label: "FAQs" },
   { href: "/contact", label: "Contact" },
 ]
 
-export function Navbar({ shopName, phone }: { shopName: string; phone: string }) {
+export function Navbar({
+  shopName,
+  phone,
+  location,
+}: {
+  shopName: string
+  phone: string
+  location: MapLocation
+}) {
   const [open, setOpen] = useState(false)
+  const mapsUrl = getGoogleMapsDirectionsUrl(location)
 
   return (
     <header className="sticky top-0 z-40 bg-brand-primary text-white shadow-md">
@@ -34,6 +45,16 @@ export function Navbar({ shopName, phone }: { shopName: string; phone: string })
             <Phone className="h-4 w-4" />
             Call
           </a>
+          <a
+            href={mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View location on map"
+            className="flex items-center gap-1.5 rounded-full border border-white/40 px-3 py-1.5 font-semibold hover:bg-white/10"
+          >
+            <MapPin className="h-4 w-4" />
+            Map
+          </a>
         </nav>
 
         <div className="flex items-center gap-2 sm:hidden">
@@ -43,6 +64,15 @@ export function Navbar({ shopName, phone }: { shopName: string; phone: string })
             className="flex items-center gap-1.5 rounded-full bg-brand-accent px-3 py-2 font-semibold text-brand-primary"
           >
             <Phone className="h-4 w-4" />
+          </a>
+          <a
+            href={mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View location on map"
+            className="flex items-center gap-1.5 rounded-full border border-white/40 px-3 py-2 font-semibold hover:bg-white/10"
+          >
+            <MapPin className="h-4 w-4" />
           </a>
           <button
             type="button"

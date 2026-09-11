@@ -1,7 +1,10 @@
 "use client"
 
 import { useActionState, useEffect, useState } from "react"
+import Link from "next/link"
+import { MessageCircle } from "lucide-react"
 import { createAppointment, type BookingState } from "@/app/(public)/book-appointment/actions"
+import { buildWhatsAppLink } from "@/lib/whatsapp"
 
 const initialState: BookingState = { status: "idle" }
 
@@ -10,7 +13,7 @@ interface SlotsResult {
   slots: string[]
 }
 
-export function BookingForm() {
+export function BookingForm({ shopPhone, shopName }: { shopPhone: string; shopName: string }) {
   const [state, formAction, pending] = useActionState(createAppointment, initialState)
   const [date, setDate] = useState("")
   const [slotsResult, setSlotsResult] = useState<SlotsResult | null>(null)
@@ -34,9 +37,30 @@ export function BookingForm() {
   const today = new Date().toISOString().slice(0, 10)
 
   if (state.status === "success") {
+    const booking = state.booking
+    const waMessage = booking
+      ? `Hi ${shopName}, I just booked an eye checkup appointment.\nName: ${booking.customerName}\nPhone: ${booking.phone}\nDate: ${booking.preferredDate}\nTime: ${booking.slotTime}${booking.reason ? `\nReason: ${booking.reason}` : ""}`
+      : undefined
+
     return (
-      <div className="rounded-lg bg-green-50 p-6 text-green-800">
-        {state.message}
+      <div className="space-y-4">
+        <div className="rounded-lg bg-green-50 p-6 text-green-800">{state.message}</div>
+        {waMessage ? (
+          <a
+            href={buildWhatsAppLink(shopPhone, waMessage)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 font-semibold text-white hover:brightness-95"
+          >
+            <MessageCircle className="h-5 w-5" /> Notify the shop on WhatsApp
+          </a>
+        ) : null}
+        <Link
+          href="/"
+          className="block w-full rounded-full border-2 border-brand-primary px-6 py-3 text-center font-semibold text-brand-primary hover:bg-brand-primary hover:text-white"
+        >
+          ← Back to Home
+        </Link>
       </div>
     )
   }

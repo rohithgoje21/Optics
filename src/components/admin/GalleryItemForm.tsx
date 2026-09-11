@@ -91,6 +91,19 @@ export function GalleryItemForm({
         </label>
       </div>
 
+      <div className="flex items-center gap-2">
+        <input
+          id="showInCarousel"
+          name="showInCarousel"
+          type="checkbox"
+          defaultChecked={item?.showInCarousel ?? false}
+          className="h-4 w-4"
+        />
+        <label htmlFor="showInCarousel" className="text-sm font-medium text-gray-700">
+          Show in home page carousel
+        </label>
+      </div>
+
       <button
         type="submit"
         disabled={pending}

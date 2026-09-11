@@ -23,6 +23,8 @@ export async function updateSiteSettingsAction(
     taglineTelugu: formData.get("taglineTelugu"),
     phone: formData.get("phone"),
     address: formData.get("address"),
+    latitude: formData.get("latitude"),
+    longitude: formData.get("longitude"),
     mapEmbedUrl: formData.get("mapEmbedUrl"),
     hoursText: formData.get("hoursText"),
     servicesText: formData.get("servicesText"),

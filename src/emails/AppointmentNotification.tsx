@@ -1,5 +1,6 @@
 import {
   Body,
+  Button,
   Container,
   Head,
   Heading,
@@ -24,6 +25,9 @@ export default function AppointmentNotification({
   slotTime,
   reason,
 }: AppointmentNotificationProps) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  const appointmentsUrl = `${siteUrl}/admin/appointments`
+
   return (
     <Html>
       <Head />
@@ -40,8 +44,27 @@ export default function AppointmentNotification({
             <Text><strong>Time:</strong> {slotTime}</Text>
             {reason ? <Text><strong>Reason / notes:</strong> {reason}</Text> : null}
           </Section>
+          <Section style={{ textAlign: "center", margin: "24px 0" }}>
+            <Button
+              href={appointmentsUrl}
+              style={{
+                backgroundColor: "#14213d",
+                color: "#ffffff",
+                padding: "12px 24px",
+                borderRadius: "999px",
+                fontWeight: "bold",
+                fontSize: "14px",
+                textDecoration: "none",
+              }}
+            >
+              View in Admin Dashboard
+            </Button>
+          </Section>
           <Text style={{ fontSize: "12px", color: "#777" }}>
-            View and manage this booking in the admin dashboard.
+            Or open it directly:{" "}
+            <a href={appointmentsUrl} style={{ color: "#14213d" }}>
+              {appointmentsUrl}
+            </a>
           </Text>
         </Container>
       </Body>

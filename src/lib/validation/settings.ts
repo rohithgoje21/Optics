@@ -6,6 +6,14 @@ export const siteSettingsSchema = z.object({
   taglineTelugu: z.string().trim().max(200).optional().or(z.literal("")),
   phone: z.string().trim().min(6).max(20),
   address: z.string().trim().min(2).max(300),
+  latitude: z.preprocess(
+    (v) => (v === "" || v == null ? undefined : v),
+    z.coerce.number().min(-90).max(90).optional()
+  ),
+  longitude: z.preprocess(
+    (v) => (v === "" || v == null ? undefined : v),
+    z.coerce.number().min(-180).max(180).optional()
+  ),
   mapEmbedUrl: z.string().trim().url().optional().or(z.literal("")),
   hoursText: z.string().trim().min(2).max(300),
   servicesText: z.string().trim().min(2).max(2000),

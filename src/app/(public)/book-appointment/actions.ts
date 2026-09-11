@@ -9,6 +9,13 @@ export interface BookingState {
   status: "idle" | "success" | "error"
   message?: string
   fieldErrors?: Record<string, string>
+  booking?: {
+    customerName: string
+    phone: string
+    preferredDate: string
+    slotTime: string
+    reason?: string | null
+  }
 }
 
 export async function createAppointment(
@@ -62,5 +69,6 @@ export async function createAppointment(
   return {
     status: "success",
     message: `Thanks ${customerName}! Your appointment request for ${preferredDate} at ${slotTime} has been received. We'll see you then.`,
+    booking: { customerName, phone, preferredDate, slotTime, reason },
   }
 }

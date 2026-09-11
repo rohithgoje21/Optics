@@ -1,24 +1,24 @@
-import type { Appointment } from "@prisma/client"
-import { StatusBadge } from "./StatusBadge"
-import { updateAppointmentStatusAction } from "@/app/admin/(dashboard)/appointments/actions"
+"use client"
 
-function StatusButton({
-  id,
-  status,
-  label,
-  className,
-}: {
-  id: string
-  status: string
-  label: string
-  className: string
-}) {
+import type { Appointment } from "@prisma/client"
+import { MessageCircle } from "lucide-react"
+import { deleteAppointmentAction } from "@/app/admin/(dashboard)/appointments/actions"
+import { buildWhatsAppLink } from "@/lib/whatsapp"
+
+function DeleteButton({ id }: { id: string }) {
   return (
-    <form action={updateAppointmentStatusAction}>
+    <form
+      action={deleteAppointmentAction}
+      onSubmit={(e) => {
+        if (!confirm("Delete this appointment permanently?")) e.preventDefault()
+      }}
+    >
       <input type="hidden" name="id" value={id} />
-      <input type="hidden" name="status" value={status} />
-      <button type="submit" className={`rounded px-2.5 py-1 text-xs font-semibold ${className}`}>
-        {label}
+      <button
+        type="submit"
+        className="rounded bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-800 hover:bg-red-200"
+      >
+        Delete
       </button>
     </form>
   )
@@ -38,7 +38,6 @@ export function AppointmentsTable({ appointments }: { appointments: Appointment[
             <th className="px-4 py-3">Name</th>
             <th className="px-4 py-3">Phone</th>
             <th className="px-4 py-3">Reason</th>
-            <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3">Actions</th>
           </tr>
         </thead>
@@ -56,34 +55,17 @@ export function AppointmentsTable({ appointments }: { appointments: Appointment[
               </td>
               <td className="max-w-xs px-4 py-3 text-gray-600">{appt.reason || "—"}</td>
               <td className="px-4 py-3">
-                <StatusBadge status={appt.status} />
-              </td>
-              <td className="px-4 py-3">
-                <div className="flex flex-wrap gap-2">
-                  {appt.status !== "CONFIRMED" && (
-                    <StatusButton
-                      id={appt.id}
-                      status="CONFIRMED"
-                      label="Confirm"
-                      className="bg-green-100 text-green-800 hover:bg-green-200"
-                    />
-                  )}
-                  {appt.status !== "COMPLETED" && (
-                    <StatusButton
-                      id={appt.id}
-                      status="COMPLETED"
-                      label="Complete"
-                      className="bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    />
-                  )}
-                  {appt.status !== "CANCELLED" && (
-                    <StatusButton
-                      id={appt.id}
-                      status="CANCELLED"
-                      label="Cancel"
-                      className="bg-red-100 text-red-800 hover:bg-red-200"
-                    />
-                  )}
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href={buildWhatsAppLink(appt.phone)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Message on WhatsApp"
+                    className="flex items-center gap-1 rounded bg-[#25D366]/10 px-2.5 py-1 text-xs font-semibold text-[#128C3E] hover:bg-[#25D366]/20"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+                  </a>
+                  <DeleteButton id={appt.id} />
                 </div>
               </td>
             </tr>

@@ -11,6 +11,7 @@ enum GalleryCategory {
   SUNGLASSES
   KIDS_FRAMES
   COMPUTER_GLASSES
+  EYE_CHECKUP
 }
 
 enum AppointmentStatus {
@@ -33,11 +34,24 @@ model SiteSettings {
   taglineTelugu String?
   phone        String
   address      String
+  latitude     Float?
+  longitude    Float?
   mapEmbedUrl  String?
   hoursText    String
   servicesText String
   aboutText    String
   updatedAt    DateTime @updatedAt
+}
+
+model FaqEntry {
+  id          String   @id @default(cuid())
+  questionEn  String
+  questionTe  String
+  answerEn    String
+  answerTe    String
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model GalleryItem {
@@ -47,6 +61,7 @@ model GalleryItem {
   category   GalleryCategory
   sortOrder  Int             @default(0)
   isActive   Boolean         @default(true)
+  showInCarousel Boolean     @default(false)
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
 

@@ -5,6 +5,7 @@ export const galleryCategories = [
   "SUNGLASSES",
   "KIDS_FRAMES",
   "COMPUTER_GLASSES",
+  "EYE_CHECKUP",
 ] as const
 
 export const galleryItemSchema = z.object({
@@ -13,6 +14,7 @@ export const galleryItemSchema = z.object({
   category: z.enum(galleryCategories),
   sortOrder: z.coerce.number().int().default(0),
   isActive: z.coerce.boolean().default(true),
+  showInCarousel: z.coerce.boolean().default(false),
 })
 
 export type GalleryItemInput = z.infer<typeof galleryItemSchema>
@@ -22,4 +24,5 @@ export const categoryLabels: Record<(typeof galleryCategories)[number], string> 
   SUNGLASSES: "Sunglasses",
   KIDS_FRAMES: "Kids Frames",
   COMPUTER_GLASSES: "Computer Glasses",
+  EYE_CHECKUP: "Eye Checkup",
 }

@@ -1,13 +1,13 @@
 import { requireAdminSession } from "@/lib/auth";
-import { AdminNav } from "@/components/admin/AdminNav";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export default async function AdminDashboardLayout({ children }: LayoutProps<"/">) {
   await requireAdminSession();
 
   return (
-    <>
-      <AdminNav />
-      <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
-    </>
+    <div className="flex min-h-screen flex-col sm:flex-row">
+      <AdminSidebar />
+      <main className="flex-1 px-4 py-8 sm:px-8">{children}</main>
+    </div>
   );
 }

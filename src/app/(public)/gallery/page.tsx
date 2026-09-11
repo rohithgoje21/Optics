@@ -3,18 +3,25 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { categoryLabels, galleryCategories } from "@/lib/validation/gallery-item";
 
+// The gallery is a browse-our-eyewear page for customers — checkup/exam
+// equipment photos are shown on the home page carousel instead, not here.
+const publicGalleryCategories = galleryCategories.filter((cat) => cat !== "EYE_CHECKUP");
+
 export default async function GalleryPage({
   searchParams,
 }: {
   searchParams: Promise<{ category?: string }>;
 }) {
   const { category } = await searchParams;
-  const activeCategory = galleryCategories.includes(category as never)
-    ? (category as (typeof galleryCategories)[number])
+  const activeCategory = publicGalleryCategories.includes(category as never)
+    ? (category as (typeof publicGalleryCategories)[number])
     : undefined;
 
   const items = await prisma.galleryItem.findMany({
-    where: { isActive: true, ...(activeCategory ? { category: activeCategory } : {}) },
+    where: {
+      isActive: true,
+      category: activeCategory ? activeCategory : { in: publicGalleryCategories },
+    },
     orderBy: { sortOrder: "asc" },
   });
 
@@ -37,7 +44,7 @@ export default async function GalleryPage({
         >
           All
         </Link>
-        {galleryCategories.map((cat) => (
+        {publicGalleryCategories.map((cat) => (
           <Link
             key={cat}
             href={`/gallery?category=${cat}`}

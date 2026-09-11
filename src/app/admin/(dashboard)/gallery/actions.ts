@@ -19,6 +19,7 @@ function parseGalleryForm(formData: FormData) {
     category: formData.get("category"),
     sortOrder: formData.get("sortOrder"),
     isActive: formData.get("isActive") === "on",
+    showInCarousel: formData.get("showInCarousel") === "on",
   })
 }
 
@@ -49,6 +50,7 @@ export async function createGalleryItemAction(
   await prisma.galleryItem.create({ data: parsed.data })
   revalidatePath("/admin/gallery")
   revalidatePath("/gallery")
+  revalidatePath("/")
   redirect("/admin/gallery")
 }
 
@@ -71,6 +73,7 @@ export async function updateGalleryItemAction(
   await prisma.galleryItem.update({ where: { id }, data: parsed.data })
   revalidatePath("/admin/gallery")
   revalidatePath("/gallery")
+  revalidatePath("/")
   redirect("/admin/gallery")
 }
 
@@ -81,4 +84,5 @@ export async function deleteGalleryItemAction(formData: FormData) {
   await prisma.galleryItem.delete({ where: { id } })
   revalidatePath("/admin/gallery")
   revalidatePath("/gallery")
+  revalidatePath("/")
 }

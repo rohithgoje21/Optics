@@ -41,7 +41,7 @@ export function ImageUploader({
         type="file"
         accept="image/png,image/jpeg,image/webp"
         onChange={handleFileChange}
-        className="block text-sm"
+        className="block w-full text-sm text-gray-500 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-brand-accent file:px-4 file:py-2 file:text-sm file:font-semibold file:text-brand-primary hover:file:brightness-95"
       />
       {uploading ? <p className="mt-2 text-sm text-gray-500">Uploading...</p> : null}
       {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}

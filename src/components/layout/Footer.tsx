@@ -1,15 +1,16 @@
 import Link from "next/link"
-import { MapPin, Phone } from "lucide-react"
+import { MapPin, Phone, Settings } from "lucide-react"
+import { getGoogleMapsDirectionsUrl, type MapLocation } from "@/lib/maps"
 
 export function Footer({
   shopName,
   phone,
-  address,
+  location,
   hoursText,
 }: {
   shopName: string
   phone: string
-  address: string
+  location: MapLocation
   hoursText: string
 }) {
   return (
@@ -20,17 +21,28 @@ export function Footer({
           <a href={`tel:+91${phone}`} className="flex items-center gap-2 hover:text-brand-accent">
             <Phone className="h-4 w-4" /> {phone}
           </a>
-          <span className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" /> {address}
-          </span>
+          <a
+            href={getGoogleMapsDirectionsUrl(location)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:text-brand-accent"
+          >
+            <MapPin className="h-4 w-4" /> {location.address}
+          </a>
           <span>{hoursText}</span>
         </div>
-        <p className="mt-6 text-xs text-white/60">
-          &copy; {new Date().getFullYear()} {shopName}.{" "}
-          <Link href="/admin/login" className="hover:text-white/90">
-            Admin
+        <div className="mt-6 flex items-center justify-between text-xs text-white/60">
+          <p>
+            &copy; {new Date().getFullYear()} {shopName}.
+          </p>
+          <Link
+            href="/admin/login"
+            aria-label="Admin login"
+            className="p-1 text-white/20 hover:text-white/50"
+          >
+            <Settings className="h-3.5 w-3.5" />
           </Link>
-        </p>
+        </div>
       </div>
     </footer>
   )
